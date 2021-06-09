@@ -1,0 +1,11 @@
+ Router(config)#interface FastEthernet 0/0
+Router(config-if)#ip address 203.1.1.1 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#exit
+Router(config)#interface FastEthernet 0/1
+Router(config-if)#ip address 10.10.10.1 255.255.255.0
+Router(config-if)#no shutdown
+
+Router(config)#router ospf 1
+Router(config-router)#network 203.1.1.0 0.0.0.255 area 0
+Router(config-router)#network 10.10.10.0 0.0.0.255 area 0
