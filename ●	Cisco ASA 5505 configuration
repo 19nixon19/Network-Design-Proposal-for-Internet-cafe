@@ -1,0 +1,30 @@
+ciscoasa(config)#interface vlan 1
+ciscoasa(config-if)#no ip address 
+ciscoasa(config)#no dhcpd address 192.168.1.5-192.168.1.35 inside
+
+ciscoasa(config)#interface vlan 1
+ciscoasa(config-if)#ip address 192.168.10.1 255.255.255.0
+ciscoasa(config-if)#no shutdown
+ciscoasa(config-if)#nameif inside
+ciscoasa(config-if)#security-level 100
+ciscoasa(config-if)#exit
+ciscoasa(config)#interface vlan 2
+ciscoasa(config-if)#ip address 203.1.1.2 255.255.255.0
+ciscoasa(config-if)#no shutdown 
+ciscoasa(config-if)#nameif outside
+ciscoasa(config-if)#security-level 0
+ciscoasa(config-if)#exit
+ciscoasa(config)#interface ethernet 0/1
+ciscoasa(config-if)#switchport access vlan 1
+ciscoasa(config)#interface ethernet 0/0
+ciscoasa(config-if)#switchport access vlan 2
+ciscoasa(config-if)#exit
+ciscoasa(config)#route outside 0.0.0.0 0.0.0.0 203.1.1.1
+ciscoasa(config)#object network LAN
+ciscoasa(config-network-object)#subnet 192.168.10.0 255.255.255.0
+ciscoasa(config-network-object)#nat (inside,outside) dynamic interface
+ciscoasa(config-network-object)#exit
+ciscoasa(config)#access-list al extended deny ip 10.10.10.12 0.0.0.255 any 
+ciscoasa(config)#access-list al extended permit tcp any any 
+ciscoasa(config)#access-list al extended permit icmp any any
+ciscoasa(config)#access-group al in interface outside
